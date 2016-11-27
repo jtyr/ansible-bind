@@ -1,0 +1,51 @@
+---
+
+- name: Test distribution
+  assert:
+    that: >
+      ansible_os_family == "Debian" or
+      ansible_os_family == "RedHat"
+  tags:
+    - bind_assert
+
+- name: Install Bind
+  package:
+    name: "{{ bind_pkg }}"
+    state: present
+  notify:
+    - Restart Bind service
+  tags:
+    - bind_pkg
+
+- name: Configure Bind
+  template:
+    src: named.conf.j2
+    dest: "{{ bind_config_file }}"
+  notify:
+    - Restart Bind service
+  tags:
+    - bind_config
+
+- name: Bind sysconfig
+  template:
+    src: named.sysconfig.j2
+    dest: "{{ bind_sysconfig_file }}"
+  notify:
+    - Restart Bind service
+  tags:
+    - bind_config
+
+- name: Enable Bind service
+  service:
+    name: "{{ bind_service }}"
+    enabled: true
+  tags:
+    - bind_service
+
+- name: Start Bind service
+  service:
+    name: "{{ bind_service }}"
+    state: running
+  register: bind_service_started
+  tags:
+    - bind_service

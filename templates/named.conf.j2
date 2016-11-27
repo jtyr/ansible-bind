@@ -1,0 +1,3 @@
+{{ ansible_managed | comment }}
+
+{{ bind_config | encode_nginx(block_semicolon=true) }}

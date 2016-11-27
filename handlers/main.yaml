@@ -1,0 +1,9 @@
+---
+
+- name: Restart Bind service
+  service:
+    name: "{{ bind_service }}"
+    state: restarted
+  when: >
+    bind_service_started is not defined or
+    not bind_service_started.changed
