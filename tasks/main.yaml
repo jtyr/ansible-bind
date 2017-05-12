@@ -44,7 +44,7 @@
 - name: Start Bind service
   service:
     name: "{{ bind_service }}"
-    state: running
+    state: started
   register: bind_service_started
   tags:
     - bind_service
